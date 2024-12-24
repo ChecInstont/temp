@@ -51,4 +51,4 @@ def parse_weather_text(weather_text):
     weather_data['visibility'] = f"{visibility_match.group(1)} km" if visibility_match else None
 
     # Return the structured weather data as a JSON object
-    return json.dumps(weather_data, indent=4)
+    return weather_data
