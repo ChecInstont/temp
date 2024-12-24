@@ -101,3 +101,8 @@ async def extract_temperature(temperature : Temperature):
 @app.get("/api/health")
 async def get_health():
     return {"status":"Ok"}
+
+    
+@app.get("/")
+async def home():
+    return {"message":"Welcome to weattemp"}
