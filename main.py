@@ -13,7 +13,7 @@ from variables import (baseUrl, search_container_class, css_selector,
                        extract_temperature_description, extract_city_name, 
                        extract_current_temperature, extract_more_details, 
                        extract_temperature_value, current_mobile_padding, 
-                       input_tag, first_list_element, main_list_element, date_and_time)
+                       input_tag, first_list_element, main_list_element, date_and_time, max_concurrent_drivers)
 
 load_dotenv()
 
@@ -31,7 +31,7 @@ def setup_driver():
     driver = webdriver.Chrome(options=options)
     return driver
 
-async def extract_temperature_with_city(city):
+def extract_temperature_with_city(city):
     """Extracts basic temperature info by searching with city name using Selenium."""
     data = {}
     if city:
@@ -89,6 +89,13 @@ async def extract_temperature_with_city(city):
 
     return data
 
+semaphore = asyncio.Semaphore(max_concurrent_drivers)
+
+async def extract_temperature_with_city_name(city):
+    """Extracts temperature with concurrency control."""
+    async with semaphore:
+        return await asyncio.to_thread(extract_temperature_with_city, city)
+
 class Temperature(BaseModel):
     """Schema Model for Temperature API"""
     city: str = None
@@ -102,7 +109,7 @@ async def extract_temperature(temperature: Temperature):
             raise HTTPException(detail="Provide city to get temperature data", status_code=400)
         
         # Use asyncio.to_thread to run the synchronous scraping code in a separate thread
-        data = await asyncio.to_thread(extract_temperature_with_city, city)
+        data = await extract_temperature_with_city_name(city=city)
         
         return JSONResponse(content=data, status_code=200)
     
