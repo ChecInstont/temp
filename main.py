@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from parse_weather_text import parse_weather_text as extract_weather_json
 from variables import baseUrl, search_container_class, css_selector, extract_temperature_description, extract_city_name, extract_current_temperature, extract_more_details, extract_temperature_value, current_mobile_padding, input_tag, first_list_element, main_list_element
 
 load_dotenv()
@@ -72,10 +73,12 @@ def extract_temperature_with_city(city):
         more_details = get_data.find_element(
             By.TAG_NAME, extract_more_details).text
 
-        data["city"] = city
-        data["temperature"] = temperature
-        data["description"] = temp_description
-        data["more_details"] = more_details
+        # data["city"] = city
+        # data["temperature"] = temperature
+        # data["description"] = temp_description
+        # data["more_details"] = more_details
+        raw_weather_text = city+"\n"+temperature+"\n"+temp_description+"\n"+more_details
+        data = extract_weather_json(weather_text=raw_weather_text)
 
     return data
 
