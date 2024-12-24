@@ -1,5 +1,4 @@
 
-import json
 import re
 from datetime import datetime
 
@@ -8,12 +7,14 @@ def parse_weather_text(weather_text):
     weather_data = {}
 
     # Extract the date, city, and temperature details using regular expressions
-    # date_time_match = re.search(r"(\w+\s\d{1,2},\s\d{1,2}:\d{2}[apm]+)", weather_text)
+    date_time_match = re.search(r"(\w+\s\d{1,2},\s\d{1,2}:\d{2}[apm]+)", weather_text)
+
     # Get the current date and time
     current_datetime = datetime.now()
     
     # Format the date and time in a specific format (e.g., "Dec 24, 01:33pm")
     formatted_datetime = current_datetime.strftime("%b %d, %I:%M%p")
+    utc_date_time_match = formatted_datetime
     
     city_match = re.search(r"([A-Za-z]+,\sIN)", weather_text)
     temperature_match = re.search(r"(\d{1,2}°C)", weather_text)
@@ -31,7 +32,8 @@ def parse_weather_text(weather_text):
 
     # Populate the dictionary with extracted values
     weather_data['city'] = city_match.group(1) if city_match else None
-    weather_data['utc_date_time'] = formatted_datetime
+    weather_data['utc_date_time'] = utc_date_time_match
+    weather_data['date_time'] = date_time_match.group(0) if date_time_match else None
     weather_data['temperature'] = temperature_match.group(1) if temperature_match else None
     
     # Include "Feels like" temperature and the rest of the description in the description field

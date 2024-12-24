@@ -4,6 +4,8 @@ baseUrl = "https://openweathermap.org/"
 search_container_class = "search-container"
 input_tag = "input"
 
+date_and_time = "orange-text"
+
 input_text = "Hyderabad"
 
 css_selector = ".grid-container.grid-4-5"
