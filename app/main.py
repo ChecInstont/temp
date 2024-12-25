@@ -10,8 +10,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
-from fastapi.requests import Request
 from pydantic import BaseModel
+from app.utils.fetch_token import generate_jwt
 from app.utils.authentication import TokenMiddleware
 from app.weather.parse_weather_text import parse_weather_text as extract_weather_json
 from app.weather.variables import (baseUrl, search_container_class, css_selector, 
@@ -155,6 +155,6 @@ async def serve_static_files(file_path: str):
 
 
 @app.get("/api/token")
-async def get_auth_token(request : Request):
-    return request
-
+async def get_auth_token():
+    token = generate_jwt()
+    return JSONResponse(content={"access_token": token})

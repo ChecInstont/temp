@@ -6,7 +6,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from jwt import PyJWTError
 import logging
-from app.utils.fetch_token import generate_jwt
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Load the public key from environment variables
 public_key = os.getenv("public-key")
@@ -22,9 +24,6 @@ class TokenMiddleware(BaseHTTPMiddleware):
 
         # Check if the request path is one of the public endpoints
         if request.url.path in public_endpoints:
-            if request.url.path=="/api/token":
-                token = generate_jwt()
-                return token
             # Skip token validation for this route
             response = await call_next(request)
             return response
