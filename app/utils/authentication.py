@@ -6,7 +6,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from jwt import PyJWTError
 import logging
-from utils.fetch_token import generate_jwt
+from app.utils.fetch_token import generate_jwt
 
 # Load the public key from environment variables
 public_key = os.getenv("public-key")
