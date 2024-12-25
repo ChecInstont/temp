@@ -143,6 +143,11 @@ async def get_health():
     """Get Health Status"""
     return {"status": "Ok"}
 
+@app.get("/api/status")
+async def get_status():
+    """Get Status"""
+    return {"status": "Ok"}
+
 
 @app.get("/{file_path:path}")
 async def serve_static_files(file_path: str):
