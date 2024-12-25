@@ -12,8 +12,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.requests import Request
 from pydantic import BaseModel
-from weather.parse_weather_text import parse_weather_text as extract_weather_json
-from weather.variables import (baseUrl, search_container_class, css_selector, 
+from app.utils.authentication import TokenMiddleware
+from app.weather.parse_weather_text import parse_weather_text as extract_weather_json
+from app.weather.variables import (baseUrl, search_container_class, css_selector, 
                        extract_temperature_description, extract_city_name, 
                        extract_current_temperature, extract_more_details, 
                        extract_temperature_value, current_mobile_padding, 
@@ -35,6 +36,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(TokenMiddleware)
 
 templates = Jinja2Templates(directory="templates")
 
