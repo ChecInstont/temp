@@ -23,7 +23,7 @@ class TokenMiddleware(BaseHTTPMiddleware):
         public_endpoints = string_to_list(public_endpoints)
 
         # Check if the request path is one of the public endpoints
-        if request.url.path in public_endpoints:
+        if any(request.url.path.startswith(endpoint) for endpoint in public_endpoints) or request.url.path in public_endpoints:
             # Skip token validation for this route
             response = await call_next(request)
             return response
