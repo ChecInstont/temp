@@ -6,6 +6,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from parse_weather_text import parse_weather_text as extract_weather_json
@@ -18,6 +20,21 @@ from variables import (baseUrl, search_container_class, css_selector,
 load_dotenv()
 
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "http://localhost:5174"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+templates = Jinja2Templates(directory="templates")
 
 def setup_driver():
     """Setup and return a headless Chrome WebDriver instance."""
@@ -121,7 +138,12 @@ async def get_health():
     """Get Health Status"""
     return {"status": "Ok"}
 
-@app.get("/")
-async def home():
-    """Default API"""
-    return {"message": "Welcome to weattemp"}
+
+@app.get("/{file_path:path}")
+async def serve_static_files(file_path: str):
+    file_location = os.path.join("templates", file_path)
+    if os.path.isfile(file_location):
+        return FileResponse(file_location)
+    # Catch-all route for SPA
+    index_file_path = os.path.join("templates", "index.html")
+    return FileResponse(index_file_path)
