@@ -140,6 +140,7 @@ cython_debug/
 *.jpeg
 *.csv
 *.xlsx
+*.pem
 
 #Folders
 react-code/

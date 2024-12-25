@@ -7,13 +7,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
+from fastapi.requests import Request
 from pydantic import BaseModel
-from parse_weather_text import parse_weather_text as extract_weather_json
-from variables import (baseUrl, search_container_class, css_selector, 
+from weather.parse_weather_text import parse_weather_text as extract_weather_json
+from weather.variables import (baseUrl, search_container_class, css_selector, 
                        extract_temperature_description, extract_city_name, 
                        extract_current_temperature, extract_more_details, 
                        extract_temperature_value, current_mobile_padding, 
@@ -149,3 +149,9 @@ async def serve_static_files(file_path: str):
     # Catch-all route for SPA
     index_file_path = os.path.join("templates", "index.html")
     return FileResponse(index_file_path)
+
+
+@app.get("/api/token")
+async def get_auth_token(request : Request):
+    return request
+
