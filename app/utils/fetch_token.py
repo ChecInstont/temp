@@ -17,7 +17,7 @@ def generate_jwt():
     current_utc_time = datetime.now(timezone.utc)
 
     # Define expiration time (1 hour from now)
-    expiration_time = current_utc_time + timedelta(hours=int(os.getenv("TOKEN_EXPIRY_TIME")))
+    expiration_time = current_utc_time + timedelta(hours=int(os.getenv("TOKEN_EXPIRY_TIME",1)))
 
 
     # Define the payload (include user-specific data and any other claims you need)
