@@ -5,3 +5,4 @@ webdriver-manager==4.0.2
 pyjwt==2.9.0
 starlette==0.38.6
 newrelic==10.2.0
+cryptography==44.0.0

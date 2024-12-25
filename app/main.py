@@ -146,9 +146,12 @@ async def get_health():
 @app.get("/api/status")
 async def get_status():
     """Get Status"""
+    return {"status": "Ok"}
+
+@app.get("/api/token")
+async def get_auth_token():
     token = generate_jwt()
     return JSONResponse(content={"access_token": token})
-    # return {"status": "Ok"}
 
 
 @app.get("/{file_path:path}")
@@ -159,9 +162,3 @@ async def serve_static_files(file_path: str):
     # Catch-all route for SPA
     index_file_path = os.path.join("templates", "index.html")
     return FileResponse(index_file_path)
-
-
-@app.get("/api/generate/token")
-async def get_auth_token():
-    token = generate_jwt()
-    return JSONResponse(content={"access_token": token})
