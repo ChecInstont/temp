@@ -143,7 +143,7 @@ async def get_health():
 @app.get("/api/status")
 async def get_status():
     """Get Status"""
-    return {"status": "Ok"}
+    return {"status": "Ok!"}
 
 @app.get("/api/token")
 async def get_auth_token():
